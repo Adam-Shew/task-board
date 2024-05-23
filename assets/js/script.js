@@ -3,7 +3,9 @@ let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 const modal = document.getElementById("taskModal");
+const taskForm = document.getElementById("taskForm");
 const addTaskBtn = document.getElementById("addTaskBtn");
+const closeModalBtn = document.getElementsByClassName("close")[0];
 
 function openModal() {
   modal.style.display = "block";
@@ -15,7 +17,7 @@ function closeModal() {
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
-
+  nextId++;
 }
 
 // Todo: create a function to create a task card
@@ -39,15 +41,18 @@ function handleAddTask(event){
   let taskDeadline = document.getElementById("taskDeadline").value;
 
   let newTask ={
+    id: generateTaskId(),
     title: taskTitle,
     description: taskDescription,
     deadline: taskDeadline
   }
 
-
+  taskList.push(newTask);
+  localStorage.setItem("tasks", JSON.stringify(taskList));
+  localStorage.setItem("nextId", JSON.stringify(nextId));
 
   createTaskCard(newTask);
-
+  closeModal();
 }
 
 // Todo: create a function to handle deleting a task
@@ -70,6 +75,7 @@ $(document).ready(function () {
 });
 
 addTaskBtn.addEventListener('click', openModal);
+closeModalBtn.addEventListener('click', closeModal)
 
 
 
