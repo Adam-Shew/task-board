@@ -23,8 +23,18 @@ function generateTaskId() {
 // Todo: create a function to create a task card
 function createTaskCard(task) {
   let newTask = document.createElement("div");
+  newTask.classList.add("task");
+  newTask.dataset.id = task.id;
+  newTask.dataset.status = task.status;
 
+  newTask.innerHTML = `
+    <h3>${task.title}</h3>
+    <p>${task.description}</p>
+    <p>Due: ${task.deadline}</p>
+    <button class="delete-btn">Delete</button>
+  `;
 
+  return newTask;
 }
 
 // Todo: create a function to render the task list and make cards draggable
@@ -44,7 +54,8 @@ function handleAddTask(event){
     id: generateTaskId(),
     title: taskTitle,
     description: taskDescription,
-    deadline: taskDeadline
+    deadline: taskDeadline,
+    status: "ontime"
   }
 
   taskList.push(newTask);
@@ -52,7 +63,15 @@ function handleAddTask(event){
   localStorage.setItem("nextId", JSON.stringify(nextId));
 
   createTaskCard(newTask);
+  saveTask(newTask);
+  taskForm.reset();
   closeModal();
+}
+
+function saveTask(task){
+  let tasks = localStorage.getItem('tasks');
+  tasks.push(task);
+  localStorage.setItem('tasks', JSON.parse(tasks));
 }
 
 // Todo: create a function to handle deleting a task
@@ -76,32 +95,3 @@ $(document).ready(function () {
 
 addTaskBtn.addEventListener('click', openModal);
 closeModalBtn.addEventListener('click', closeModal)
-
-
-
-/*
-
-GARYS NOTES
-
-const tasks = {
-  todo:{
-
-  }
-  inprogress{
-
-  }
-  done:{
-
-  }
-}
-
-each card can be put into the tasks array
-create a function to produce the cards(tasks)
-
-function renderTasks(){
-  //create 3 buckets
-  //for each bucket, build a ui task iteam for each item in the array
-}
-
-
-*/
